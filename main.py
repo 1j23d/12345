@@ -7,11 +7,15 @@ import sys
 import os
  
  
-def get_color():
-    # 获取随机颜色
-    get_colors = lambda n: list(map(lambda i: "#" + "%06x" % random.randint(0, 0xFFFFFF), range(n)))
-    color_list = get_colors(100)
-    return random.choice(color_list)
+
+def random_color():
+    # 生成随机的 RGB 颜色值
+    r = random.randint(0, 255)
+    g = random.randint(0, 255)
+    b = random.randint(0, 255)
+    # 将 RGB 颜色值转换成十六进制表示
+    color_hex = "#{:02x}{:02x}{:02x}".format(r, g, b)
+    return color_hex
  
  
 def get_access_token():
@@ -143,35 +147,35 @@ def send_message(to_user, access_token, region_name, weather, temp, wind_dir, no
         "data": {
             "date": {
                 "value": "{} {}".format(today, week),
-                "color": get_color()
+                "color": random_color()
             },
             "region": {
                 "value": region_name,
-                "color": get_color()
+                "color": random_color()
             },
             "weather": {
                 "value": weather,
-                "color": get_color()
+                "color": random_color()
             },
             "temp": {
                 "value": temp,
-                "color": get_color()
+                "color": random_color()
             },
             "wind_dir": {
                 "value": wind_dir,
-                "color": get_color()
+                "color": random_color()
             },
             "love_day": {
                 "value": love_days,
-                "color": get_color()
+                "color": random_color()
             },
             "note_en": {
                 "value": note_en,
-                "color": get_color()
+                "color": random_color()
             },
             "note_ch": {
                 "value": note_ch,
-                "color": get_color()
+                "color": random_color()
             }
         }
     }
