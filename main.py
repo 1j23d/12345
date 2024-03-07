@@ -150,8 +150,9 @@ def send_message(to_user, access_token, region_name, weather, temp, wind_dir, no
                 "color": random_color()
             },
             "region": {
-                "value": region_name,
-                "color": "#FF0000"
+                # "value": region_name,
+                 "value": "<font color=\"#0000FF\">region_name</font>"
+                # "color": "#FF0000"
             },
             "weather": {
                 "value": weather,
