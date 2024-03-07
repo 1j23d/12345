@@ -20,7 +20,6 @@ _service_code = _tb_nm
 log_home = '/home/xusl/log/wx'
 
 # 日志level
-log_level = logging.INFO
 
 # 日志打印到控制台
 log_to_console = True
@@ -70,7 +69,6 @@ def get_access_token(config):
     try:
         access_token = get(post_url).json()['access_token']
     except KeyError:
-        logging.error("获取access_token失败，请检查app_id和app_secret是否正确")
         sys.exit(1)
     return access_token
 
@@ -124,7 +122,6 @@ def get_weather_info(config, today_dt):
             if item["ymd"] == today_dt:
                 return True, item
     else:
-        logging.error("天气信息获取失败，请检查天气API是否正常")
         return False, response["status"]
 
 
@@ -232,11 +229,8 @@ def send_message(to_user, access_token, template_id, result, city_nm, birth_day,
     day = localtime().tm_mday  # 日 19
 
     today = datetime.date(year=year, month=month, day=day)
-    logging.info('today：%s ' % today)
     week = week_list[today.isoweekday() % 7]
-    logging.info('week：%s ' % week)
 
-    logging.info('城市：{}，天气：{}，高温：{}，低温：{}'.format(city_nm, weather, max_temperature, min_temperature))
     data = {
         "touser": to_user,
         "template_id": template_id,
@@ -304,11 +298,5 @@ if __name__ == '__main__':
             # 接收的用户
             to_user = config["user"]                    # 用户里诶奥
 
-            if flag is True:
-                logging.info(f'天气获取成功 {result}: {str(result)}')
-                for user in to_user:
-                    send_message(user, access_token, template_id, result, city_nm, birth_day, birthday_data)
-            else:
-                logging.error(f'异常 {result}: {str(result)}')
+          
     except FileNotFoundError:
-        logging.error("推送消息失败，请检查config.txt文件是否与程序位于同一路径")
