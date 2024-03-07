@@ -7,9 +7,7 @@ import sys, json
 import os
 import requests
 
-\_tb_nm = '微信每日推送'
-\_tb_nm_cn = "微信每日推送"
-\_service_code = \_tb_nm
+
 
 # 日志目录
 
