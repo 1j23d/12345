@@ -1,17 +1,16 @@
-# Created on 2024/1/19
-# @title: '微信公众号发送消息'
-# @author: Xusl
 
-import logging.config
+
+
+
 import random
+from time import localtime
+from requests import get, post
+
 import datetime
 import sys, json
 import os
 import requests
 
-from time import localtime
-from requests import get, post
-from zhdate import ZhDate
 
 
 _tb_nm = '微信每日推送'
@@ -27,36 +26,6 @@ log_level = logging.INFO
 log_to_console = True
 
 
-log_config = {
-    'version': 1,
-    'formatters': {
-        'generic': {
-            'format': '%(asctime)s %(levelname)-5.5s [%(name)s:%(lineno)s][%(threadName)s] %(message)s',
-        },
-        'simple': {
-            'format': '%(asctime)s %(levelname)-5.5s %(message)s',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'generic',
-        },
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(log_home, _tb_nm + '.log'),
-            'encoding': 'utf-8',
-            'formatter': 'generic',
-
-        },
-    },
-    'root': {
-        'level': log_level,
-        'handlers': ['console', 'file', ] if log_to_console else ['file', ],
-    }
-}
-logging.config.dictConfig(log_config)
-logger = logging.getLogger(_tb_nm)
 
 # 每日一言
 lines = [
@@ -91,7 +60,7 @@ def get_color():
 
 
 def get_access_token(config):
-    logger.info('获取access_token...................')
+   
     # appId
     app_id = config["app_id"]
     # appSecret
@@ -141,7 +110,6 @@ def get_weather_info(config, today_dt):
     获取城市当日天气
     :return:
     """
-    logger.info('获取天气...................')
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                       'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
@@ -165,7 +133,7 @@ def get_birthday(config, year, today_dt):
     获取距离下次生日的时间
     :return:
     """
-    logger.info('获取距离下次生日的时间...................')
+   
     birthday = config["birth_day"]  # 获取生日日期
     birthday_year = birthday.split("-")[0]  # 2023 or r2023
     # 将str日期转换为日期型
@@ -179,7 +147,7 @@ def get_birthday(config, year, today_dt):
             r_day = int(birthday.split("-")[2])
             nl_birthday = ZhDate(year, r_mouth, r_day).to_datetime().date()
         except TypeError:
-            logger.error("请检查生日的日子是否在今年存在")
+           
             # 调用系统命令行执行 pause 命令，目的是在控制台窗口显示 "请按任意键继续. . ." 的提示信息，并等待用户按下任意键后继续执行程序
             # os.system("pause")
             sys.exit(1)     # 异常退出
@@ -252,7 +220,6 @@ def send_message(to_user, access_token, template_id, result, city_nm, birth_day,
     :param birthday_data:
     :return:
     """
-    logger.info('发送微信通知...................')
     weather = result["type"]  # 天气
     max_temperature = result["high"]  # 高温
     min_temperature = result["low"]  # 低温
@@ -318,16 +285,7 @@ def send_message(to_user, access_token, template_id, result, city_nm, birth_day,
                       'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
     }
     response = post(url, headers=headers, json=data).json()
-    if response["errcode"] == 40037:
-        logger.error("推送消息失败，请检查模板id是否正确")
-    elif response["errcode"] == 40036:
-        logger.error("推送消息失败，请检查模板id是否为空")
-    elif response["errcode"] == 40003:
-        logger.error("推送消息失败，请检查微信号是否正确")
-    elif response["errcode"] == 0:
-        logger.info("推送消息成功")
-    else:
-        logger.info(response)
+  
 
 
 if __name__ == '__main__':
