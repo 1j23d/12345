@@ -144,11 +144,12 @@ def send_message(to_user, access_token, region_name, weather, temp, wind_dir, no
         "template_id": config["template_id"],
         "url": "http://weixin.qq.com/download",
         # "topcolor": "#FF0000",
-        "topcolor": "#00FF00",
+        # "topcolor": "#00FF00",
         "data": {
             "date": {
                 "value": "{} {}".format(today, week),
-                "color": random_color()
+                "color": "#00FF00"
+                # "color": random_color()
             },
             "region": {
                 "value": region_name,
